@@ -1,0 +1,22 @@
+services:
+  backend:
+    build: ./backend
+    #need docker file in backend folder to build the image
+    container_name: backend
+    restart: always
+    env_file: ./backend/.env
+    ports: 
+    - "3000:3000"
+     
+
+  frontend:
+    build:
+      ./frontend
+      # need docker file in frontend folder to build the image
+    container_name: frontend
+    restart: always
+    env_file: ./frontend/.env
+    depends_on:
+      - backend
+    ports:
+      - 5170:5173

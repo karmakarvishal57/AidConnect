@@ -1,0 +1,48 @@
+const mongoose = require("mongoose");
+
+const appointmentSchema = new mongoose.Schema({
+  docId: {
+    type: String,
+    required: true,
+  },
+  userId: {
+    type: String,
+    required: true,
+  },
+  slotTime: {
+    type: String,
+    required: true,
+  },
+  slotDate: {
+    type: String,
+    required: true,
+  },
+  docData: {
+    type: Object,
+    required: true,
+  },
+  userData: {
+    type: Object,
+    required: true,
+  },
+  amount: {
+    type: Number,
+    required: true,
+  },
+  date: {
+    type: Date,
+    required: true,
+  },
+  cancelled: {
+    type: Boolean,
+    default: false,
+  },
+  payment: { type: Boolean, default: false },
+  isCompleted: { type: Boolean, default: false },
+});
+
+const appointmentModel =
+  mongoose.models.appointment ||
+  mongoose.model("Appointment", appointmentSchema);
+
+module.exports = appointmentModel;                           
