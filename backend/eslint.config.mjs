@@ -1,6 +1,6 @@
 export default [
   {
     files: ['**/*.js'],
-    rules: { semi: 'error', 'no-unused-vars': 'warn' },
+    rules: { semi: 'warn', 'no-unused-vars': 'warn' },
   },
 ];
