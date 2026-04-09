@@ -67,8 +67,8 @@ const addDoctor = async (req, res) => {
     const doctor = new doctorModel(doctorData);
     await doctor.save();
     res.json({ success: true, message: 'Doctor Added' });
-  } catch (error) {
-    res.json({ success: false, message: error.message });
+  } catch (err) {
+    res.json({ success: false, message: err.message });
   }
 };
 
@@ -81,8 +81,8 @@ const adminLogin = async (req, res) => {
     } else {
       res.json({ success: false, message: 'Invalid Credentials' });
     }
-  } catch (error) {
-    res.json({ success: false, message: error.message });
+  } catch (err) {
+    res.json({ success: false, message: err.message });
   }
 };
 
@@ -103,7 +103,7 @@ const allAppointments = async (req, res) => {
   try {
     const appointmentData = await appointmentModel.find({});
     return res.json({ success: true, appointmentData });
-  } catch (error) {
+  } catch (err) {
     return res.json({ success: false, message: err.message });
   }
 };
@@ -139,7 +139,7 @@ const cancelAppointment = async (req, res) => {
         message: 'Appointment Not Found Or Cancelled',
       });
     }
-  } catch (error) {
+  } catch (err) {
     return res.json({ success: false, message: err.message });
   }
 };
@@ -159,8 +159,8 @@ const adminDashboard = async (req, res) => {
       latestAppointments: appointments?.reverse().slice(0, 5),
     };
     return res.json({ success: true, dashData });
-  } catch (error) {
-    return res.json({ success: false, message: error.message });
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
   }
 };
 

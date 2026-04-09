@@ -12,9 +12,9 @@ const changeAvailability = async (req, res) => {
       available: !docData?.available,
     });
     res.json({ success: true, message: 'Availability Changed' });
-  } catch (error) {
-    console.log(error);
-    res.json({ success: true, message: error?.message });
+  } catch (err) {
+    console.log(err);
+    res.json({ success: true, message: err?.message });
   }
 };
 
@@ -41,8 +41,8 @@ const doctorLogin = async (req, res) => {
     } else {
       return res.json({ success: false, message: 'Invalid Credentials' });
     }
-  } catch (error) {
-    return res.json({ success: false, message: error.message });
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
   }
 };
 
@@ -55,8 +55,8 @@ const doctorAppointments = async (req, res) => {
     const appointments = await appointmentModel.find({ docId });
 
     return res.json({ success: true, appointments });
-  } catch (error) {
-    return res.json({ success: false, message: error.message });
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
   }
 };
 
@@ -96,7 +96,7 @@ const cancelAppointment = async (req, res) => {
         message: 'Appointment Not Found Or Cancelled',
       });
     }
-  } catch (error) {
+  } catch (err) {
     return res.json({ success: false, message: err.message });
   }
 };
@@ -121,8 +121,8 @@ const completeAppointment = async (req, res) => {
       success: false,
       message: 'Marked Failed',
     });
-  } catch (error) {
-    return res.json({ success: false, message: error.message });
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
   }
 };
 
@@ -156,8 +156,8 @@ const docDashboard = async (req, res) => {
       latestAppointments: appointments.reverse().slice(0, 5),
     };
     res.json({ success: true, dashData });
-  } catch (error) {
-    return res.json({ success: false, message: error.message });
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
   }
 };
 
@@ -171,8 +171,8 @@ const doctorProfile = async (req, res) => {
       return res.json({ success: false, message: 'Profile Not Found' });
     }
     return res.json({ success: true, profileData });
-  } catch (error) {
-    return res.json({ success: false, message: error.message });
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
   }
 };
 
@@ -185,8 +185,8 @@ const updateDoctorProfile = async (req, res) => {
 
     await doctorModel.findByIdAndUpdate(docId, { fees, address, available });
     return res.json({ success: true, message: 'Profile Updated' });
-  } catch (error) {
-    return res.json({ success: false, message: error.message });
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
   }
 };
 
