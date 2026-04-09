@@ -1,52 +1,53 @@
 name: build-and-lint
+
 on:
-push:
-branches: [main, dev]
-pull_request:
-branches: [main, dev]
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
 
 jobs:
-build-and-lint:
-runs-on: ubuntu-latest
-steps:
-- name: Checkout repo
-  uses: actions/checkout@v3
+  build-and-lint:
+    runs-on: ubuntu-latest
 
-- name: Setup Node
-  uses: actions/setup-node@v3
-  with:
-    node-version: 20
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-- name: Install backend deps
-  working-directory: backend
-  run: npm ci
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
 
-- name: Lint backend
-  working-directory: backend
-  run: npm run lint -- --max-warnings=0
+      - name: Install backend deps
+        working-directory: backend
+        run: npm ci
 
-- name: Install frontend deps
-  working-directory: frontend
-  run: npm ci
+      - name: Lint backend
+        working-directory: backend
+        run: npm run lint -- --max-warnings=0
 
-- name: Lint frontend
-  working-directory: frontend
-  run: npm run lint -- --max-warnings=0
+      - name: Install frontend deps
+        working-directory: frontend
+        run: npm ci
 
-- name: Install admin deps
-  working-directory: admin
-  run: npm ci
+      - name: Lint frontend
+        working-directory: frontend
+        run: npm run lint -- --max-warnings=0
 
-- name: Lint admin
-  working-directory: admin
-  run: npm run lint -- --max-warnings=0
+      - name: Install admin deps
+        working-directory: admin
+        run: npm ci
 
-- name: Build backend Docker image
-  run: docker build -t backend ./backend
-  
-- name: Build frontend Docker image
-  run: docker build -t frontend ./frontend
+      - name: Lint admin
+        working-directory: admin
+        run: npm run lint -- --max-warnings=0
 
-- name: Build admin Docker image
-  run:  docker build -t admin ./admin  
+      - name: Build backend Docker image
+        run: docker build -t backend ./backend
 
+      - name: Build frontend Docker image
+        run: docker build -t frontend ./frontend
+
+      - name: Build admin Docker image
+        run: docker build -t admin ./admin
