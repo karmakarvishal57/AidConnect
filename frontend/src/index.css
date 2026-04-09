@@ -1,23 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
-@import "tailwindcss";
+@import 'tailwindcss';
 
-
-*{
-    font-family: Outfit;
+* {
+  font-family: Outfit;
 }
 
-::-webkit-scrollbar{
- @apply hidden;
+::-webkit-scrollbar {
+  @apply hidden;
 }
 
-*{
- scroll-behavior: smooth;
+* {
+  scroll-behavior: smooth;
 }
 
-.active{
-    @apply text-xl text-yellow-500 duration-[150ms] transition-all;
-    hr{
-        @apply block;
-    }
+.active {
+  @apply text-xl text-yellow-500 duration-[150ms] transition-all;
+  hr {
+    @apply block;
+  }
 }
-

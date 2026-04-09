@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from "react";
-import { AppContext } from "../context/AppContext";
-import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from 'react';
+import { AppContext } from '../context/AppContext';
+import { useNavigate } from 'react-router-dom';
 
 const RelatedDoctors = ({ docId, speciality }) => {
   const { doctors } = useContext(AppContext);
@@ -10,7 +10,7 @@ const RelatedDoctors = ({ docId, speciality }) => {
   useEffect(() => {
     if (doctors.length > 0 && speciality) {
       const doctorsData = doctors.filter(
-        (doc) => doc.speciality === speciality && doc._id !== docId
+        (doc) => doc.speciality === speciality && doc._id !== docId,
       );
       setRelatedDoctors(doctorsData);
     }
@@ -33,15 +33,15 @@ const RelatedDoctors = ({ docId, speciality }) => {
             <div className="p-4">
               <div
                 className={`flex items-center gap-1 text-xs ${
-                  item?.available ? "text-green-400" : "text-red-400"
+                  item?.available ? 'text-green-400' : 'text-red-400'
                 } `}
               >
                 <p
                   className={`w-1 h-1 ${
-                    item?.available ? "bg-green-400" : "bg-red-400"
+                    item?.available ? 'bg-green-400' : 'bg-red-400'
                   }  rounded-full`}
                 ></p>
-                <p>{item?.available ? "Available" : "Unavailable"}</p>
+                <p>{item?.available ? 'Available' : 'Unavailable'}</p>
               </div>
               <p className="text-lg font-semibold">{item?.speciality}</p>
               <p className=" font-medium text-gray-700">{item?.name}</p>

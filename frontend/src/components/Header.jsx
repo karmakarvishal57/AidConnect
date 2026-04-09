@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import { assets } from "../assets/assets_frontend/assets";
+import { Link } from 'react-router-dom';
+import { assets } from '../assets/assets_frontend/assets';
 
 function Header() {
   return (

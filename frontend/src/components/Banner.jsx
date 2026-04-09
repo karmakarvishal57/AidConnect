@@ -1,5 +1,5 @@
-import { assets } from "../assets/assets_frontend/assets";
-import { useNavigate } from "react-router-dom";
+import { assets } from '../assets/assets_frontend/assets';
+import { useNavigate } from 'react-router-dom';
 
 const Banner = () => {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const Banner = () => {
         <button
           className="bg-white text-blue-600  rounded-2xl py-2 px-4 font-semibold mt-4 cursor-pointer"
           onClick={() => {
-            navigate("/login");
+            navigate('/login');
             scrollTo(0, 0);
           }}
         >

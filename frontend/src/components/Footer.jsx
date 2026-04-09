@@ -1,21 +1,16 @@
-import { assets } from "../assets/assets_frontend/assets";
+import { assets } from '../assets/assets_frontend/assets';
 
 export const Footer = () => {
   return (
     <div className="mt-30 mx-8">
       <div className="grid grid-cols-[1fr_1fr_1fr] justify-items-center ">
         <div className="flex flex-col gap-4">
-          <img
-            src={assets.aidconnect2}
-            alt="logo_image"
-            className="w-12 rounded-md"
-          />
+          <img src={assets.aidconnect2} alt="logo_image" className="w-12 rounded-md" />
 
           <p className="text-sm font-medium text-gray-600 leading-6">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book.
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+            has been the industry's standard dummy text ever since the 1500s, when an unknown
+            printer took a galley of type and scrambled it to make a type specimen book.
           </p>
         </div>
 

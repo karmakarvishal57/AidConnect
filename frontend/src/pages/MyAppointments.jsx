@@ -1,40 +1,40 @@
-import { useContext } from "react";
-import { AppContext } from "../context/AppContext";
-import { useEffect } from "react";
-import axios from "axios";
-import { useState } from "react";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useContext } from 'react';
+import { AppContext } from '../context/AppContext';
+import { useEffect } from 'react';
+import axios from 'axios';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 const MyAppointments = () => {
   const { backendURL, token, getAllDoctors } = useContext(AppContext);
   const [appointment, setAppointment] = useState([]);
   const navigate = useNavigate();
   const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
 
   const dateOfAppointment = (slotDate) => {
-    let date = slotDate.split("_");
-    return date[0] + " " + months[Number(date[1]) - 1] + " " + date[2];
+    let date = slotDate.split('_');
+    return date[0] + ' ' + months[Number(date[1]) - 1] + ' ' + date[2];
   };
 
   const cancelAppointment = async (appointmentId) => {
     try {
       const { data } = await axios.put(
-        backendURL + "/api/user/cancel-appointment",
+        backendURL + '/api/user/cancel-appointment',
         { appointmentId },
-        { headers: { token } }
+        { headers: { token } },
       );
 
       if (data.success) {
@@ -52,22 +52,20 @@ const MyAppointments = () => {
   const init_pay = (order) => {
     const options = {
       key: import.meta.env.VITE_RAZORPAY_API_KEY,
-      name: "Appointment Payment",
-      description: "Appointment Payment",
+      name: 'Appointment Payment',
+      description: 'Appointment Payment',
       amount: order?.amount,
       currency: order?.currency,
       order_id: order.id,
       receipt: order.receipt,
       handler: async (response) => {
         try {
-          const { data } = await axios.post(
-            backendURL + "/api/user/verify-payment",
-            response,
-            { headers: { token } }
-          );
+          const { data } = await axios.post(backendURL + '/api/user/verify-payment', response, {
+            headers: { token },
+          });
           if (data.success) {
             appointmentsList();
-            navigate("/my-appointments");
+            navigate('/my-appointments');
             toast.success(data.message);
           } else {
             toast.error(data.message);
@@ -84,9 +82,9 @@ const MyAppointments = () => {
   const payment_razorPay = async (appointmentId) => {
     try {
       const { data } = await axios.post(
-        backendURL + "/api/user/payment-razorpay",
+        backendURL + '/api/user/payment-razorpay',
         { appointmentId },
-        { headers: { token } }
+        { headers: { token } },
       );
       if (data.success) {
         init_pay(data?.order);
@@ -100,10 +98,9 @@ const MyAppointments = () => {
 
   async function appointmentsList() {
     try {
-      const { data } = await axios.get(
-        backendURL + "/api/user/list-appointment",
-        { headers: { token } }
-      );
+      const { data } = await axios.get(backendURL + '/api/user/list-appointment', {
+        headers: { token },
+      });
       if (data.success) {
         setAppointment(data?.appointmentData);
       } else {
@@ -118,31 +115,23 @@ const MyAppointments = () => {
   }, []);
   return (
     <div className="text-zinc-600 ">
-      <p className="border-b-2 border-gray-400 py-4 font-medium">
-        My Appointments
-      </p>
+      <p className="border-b-2 border-gray-400 py-4 font-medium">My Appointments</p>
       <div>
         {appointment.map((item, idx) => (
           <div className="grid grid-cols-[1fr_2fr] text-sm gap-4 py-4 border-b-2 border-gray-300 sm:flex ">
             <div key={idx} className="sm:w-30 ">
               <img
                 src={item?.docData?.image}
-                alt={"doctors_img"}
+                alt={'doctors_img'}
                 className="bg-gray-100 w-[100%] rounded"
               />
             </div>
             <div className="flex-1">
-              <p className="font-bold text-neutral-600">
-                {item?.docData?.name}
-              </p>
+              <p className="font-bold text-neutral-600">{item?.docData?.name}</p>
               <p className="font-medium">{item?.docData.speciality}</p>
               <p className="font-semibold mt-1">Address : </p>
-              <p className="text-xs font-medium">
-                {item?.docData.address.line1}
-              </p>
-              <p className="text-xs font-medium">
-                {item?.docData.address.line2}
-              </p>
+              <p className="text-xs font-medium">{item?.docData.address.line1}</p>
+              <p className="text-xs font-medium">{item?.docData.address.line2}</p>
               <p className="font-medium text-xs mt-1">
                 <span className="font-semibold text-sm">Date & Time : </span>
                 {dateOfAppointment(item?.slotDate)} | {item?.slotTime}
@@ -151,9 +140,7 @@ const MyAppointments = () => {
             <div></div>
             <div className="flex flex-col justify-end gap-2 ">
               {!item.cancelled && !item?.isCompleted && item.payment ? (
-                <button className="bg-indigo-100 p-2 rounded outline min-w-50">
-                  Paid
-                </button>
+                <button className="bg-indigo-100 p-2 rounded outline min-w-50">Paid</button>
               ) : null}
               {!item.cancelled && !item.payment && !item?.isCompleted ? (
                 <button

@@ -1,21 +1,20 @@
-import { useContext, useEffect, useState } from "react";
-import { AppContext } from "../context/AppContext";
-import { useParams } from "react-router-dom";
-import { assets } from "../assets/assets_frontend/assets";
-import RelatedDoctors from "../components/RelatedDoctors";
-import { toast } from "react-toastify";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from 'react';
+import { AppContext } from '../context/AppContext';
+import { useParams } from 'react-router-dom';
+import { assets } from '../assets/assets_frontend/assets';
+import RelatedDoctors from '../components/RelatedDoctors';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Appointment() {
   const { docId } = useParams();
   const [docInfo, setDocInfo] = useState({});
-  const { doctors, currencySymbol, getAllDoctors, backendURL, token } =
-    useContext(AppContext);
+  const { doctors, currencySymbol, getAllDoctors, backendURL, token } = useContext(AppContext);
   const [docSlots, setDocSlots] = useState([]);
   const [slotIndex, setSlotIndex] = useState(0);
-  const [slotTime, setSlotTime] = useState("");
-  const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THUR", "FRI", "SAT"];
+  const [slotTime, setSlotTime] = useState('');
+  const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THUR', 'FRI', 'SAT'];
 
   const navigate = useNavigate();
 
@@ -45,9 +44,7 @@ function Appointment() {
       // setting hours for appointments
 
       if (today.getDate() === currentDate.getDate()) {
-        currentDate.setHours(
-          currentDate.getHours() >= 10 ? currentDate.getHours() + 1 : 10
-        );
+        currentDate.setHours(currentDate.getHours() >= 10 ? currentDate.getHours() + 1 : 10);
         currentDate.setMinutes(currentDate.getMinutes() >= 30 ? 30 : 0);
       } else {
         currentDate.setHours(10);
@@ -57,20 +54,19 @@ function Appointment() {
       let timeSlots = [];
       while (currentDate < endTime) {
         let formattedTime = currentDate.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
+          hour: '2-digit',
+          minute: '2-digit',
         });
 
         let day = currentDate.getDate();
         let month = currentDate.getMonth() + 1;
         let year = currentDate.getFullYear();
 
-        let slotDate = day + "_" + month + "_" + year;
+        let slotDate = day + '_' + month + '_' + year;
         let slotTime = formattedTime;
 
         const isSlotAvailable =
-          docInfo?.slots_booked?.[slotDate] &&
-          docInfo?.slots_booked?.[slotDate]?.includes(slotTime)
+          docInfo?.slots_booked?.[slotDate] && docInfo?.slots_booked?.[slotDate]?.includes(slotTime)
             ? false
             : true;
 
@@ -89,8 +85,8 @@ function Appointment() {
 
   const bookAppointment = async () => {
     if (!token) {
-      toast.warn("Login to book appointment");
-      return navigate("/login");
+      toast.warn('Login to book appointment');
+      return navigate('/login');
     }
     try {
       const date = docSlots[slotIndex][0]?.dateTime;
@@ -99,17 +95,17 @@ function Appointment() {
       let month = date.getMonth() + 1;
       let year = date.getFullYear();
 
-      let slotDate = day + "_" + month + "_" + year;
+      let slotDate = day + '_' + month + '_' + year;
 
       const { data } = await axios.post(
-        backendURL + "/api/user/book-appointment",
+        backendURL + '/api/user/book-appointment',
         { docId, slotDate, slotTime },
-        { headers: { token } }
+        { headers: { token } },
       );
       if (data.success) {
         toast.success(data.message);
         getAllDoctors();
-        navigate("/my-appointments");
+        navigate('/my-appointments');
       } else {
         toast.error(data.message);
       }
@@ -144,11 +140,7 @@ function Appointment() {
         <div className="flex-2 border-2 border-gray-400 rounded-lg p-8 py-7 ">
           <p className="flex items-center gap-2 text-2xl font-semibold">
             {docInfo.name}
-            <img
-              src={assets.verified_icon}
-              alt="verified_image"
-              className="w-6"
-            />
+            <img src={assets.verified_icon} alt="verified_image" className="w-6" />
           </p>
           <div className="flex text-sm gap-2 text-gray-600 font-medium mt-2 text-nowrap">
             <p>
@@ -165,9 +157,7 @@ function Appointment() {
             <p className="flex items-center gap-1 text-sm text-gray-900 font-medium mt-2">
               About <img src={assets.info_icon} alt="" className="w-3" />
             </p>
-            <p className="text-sm text-gray-600 font-medium mt-2">
-              {docInfo.about}
-            </p>
+            <p className="text-sm text-gray-600 font-medium mt-2">{docInfo.about}</p>
             <p className="text-sm  font-medium mt-2 text-gray-500">
               Appointment Fees :<span> {currencySymbol + docInfo.fees}</span>
             </p>
@@ -185,16 +175,14 @@ function Appointment() {
               <div
                 key={idx}
                 className={`text-center cursor-pointer rounded-full py-4 min-w-16 ${
-                  slotIndex === idx
-                    ? "bg-blue-500 text-white"
-                    : "bg-white shadow"
+                  slotIndex === idx ? 'bg-blue-500 text-white' : 'bg-white shadow'
                 }`}
                 onClick={() => setSlotIndex(idx)}
               >
                 <p>{item[0] && daysOfWeek[item[0].dateTime.getDay()]}</p>
                 <p>{item[0] && item[0].dateTime.getDate()}</p>
               </div>
-            ) : null
+            ) : null,
           )}
         </div>
         <div className="flex gap-3 overflow-x-auto mt-6 w-full">
@@ -204,8 +192,8 @@ function Appointment() {
                 key={idx}
                 className={`flex-shrink-0 font-light cursor-pointer px-4 py-2 rounded-full  ${
                   item.slot === slotTime
-                    ? "bg-blue-400 text-white"
-                    : "bg-white border-2 border-gray-300"
+                    ? 'bg-blue-400 text-white'
+                    : 'bg-white border-2 border-gray-300'
                 }`}
                 onClick={() => setSlotTime(item.slot)}
               >

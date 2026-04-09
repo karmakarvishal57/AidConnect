@@ -1,8 +1,8 @@
-import { useContext, useEffect } from "react";
-import { Router, useNavigate, useParams } from "react-router-dom";
-import { AppContext } from "../context/AppContext";
-import { useState } from "react";
-import AllDoctors from "../components/AllDoctors";
+import { useContext, useEffect } from 'react';
+import { Router, useNavigate, useParams } from 'react-router-dom';
+import { AppContext } from '../context/AppContext';
+import { useState } from 'react';
+import AllDoctors from '../components/AllDoctors';
 
 const Doctors = () => {
   const { speciality } = useParams();
@@ -22,7 +22,9 @@ const Doctors = () => {
     applyFilters();
   }, [doctors, speciality]);
 
-  return <AllDoctors props={{doctors,speciality,filterDocs,navigate,setFilterDocs}}></AllDoctors>
+  return (
+    <AllDoctors props={{ doctors, speciality, filterDocs, navigate, setFilterDocs }}></AllDoctors>
+  );
 };
 
 export default Doctors;

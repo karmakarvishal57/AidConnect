@@ -5,9 +5,8 @@ services:
     container_name: backend
     restart: always
     env_file: ./backend/.env
-    ports: 
-    - "3000:3000"
-     
+    ports:
+      - "3000:3000"
 
   frontend:
     build:
@@ -20,3 +19,15 @@ services:
       - backend
     ports:
       - 5170:5173
+
+  admin:
+    build:
+      ./admin
+      # need docker file in admin folder to build the image
+    container_name: admin
+    restart: always
+    env_file: ./admin/.env
+    depends_on:
+      - backend
+    ports:
+      - 5171:5174

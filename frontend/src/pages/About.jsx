@@ -1,4 +1,4 @@
-import { assets } from "../assets/assets_frontend/assets";
+import { assets } from '../assets/assets_frontend/assets';
 
 const About = () => {
   return (
@@ -15,28 +15,24 @@ const About = () => {
         />
         <div className="p-4 rounded-sm">
           <p>
-            Welcome to AidConnect, your trusted partner in managing your
-            healthcare needs conveniently and efficiently. At AidConnect, we
-            understand the challenges individuals face when it comes to
-            scheduling doctor appointments and managing their health records.
+            Welcome to AidConnect, your trusted partner in managing your healthcare needs
+            conveniently and efficiently. At AidConnect, we understand the challenges individuals
+            face when it comes to scheduling doctor appointments and managing their health records.
           </p>
           <br />
           <p>
-            AidConnect is committed to excellence in healthcare technology. We
-            continuously strive to enhance our platform, integrating the latest
-            advancements to improve user experience and deliver superior
-            service. Whether you're booking your first appointment or managing
-            ongoing care, AidConnect is here to support you every step of the
-            way.
+            AidConnect is committed to excellence in healthcare technology. We continuously strive
+            to enhance our platform, integrating the latest advancements to improve user experience
+            and deliver superior service. Whether you're booking your first appointment or managing
+            ongoing care, AidConnect is here to support you every step of the way.
           </p>
           <br />
           <b className="text-gray-600">Our Vision</b>
           <br />
           <p>
-            Our vision at AidConnect is to create a seamless healthcare
-            experience for every user. We aim to bridge the gap between patients
-            and healthcare providers, making it easier for you to access the
-            care you need, when you need it.
+            Our vision at AidConnect is to create a seamless healthcare experience for every user.
+            We aim to bridge the gap between patients and healthcare providers, making it easier for
+            you to access the care you need, when you need it.
           </p>
         </div>
       </div>
@@ -48,23 +44,15 @@ const About = () => {
       <div className="grid grid-cols-3 border-gray-500 border-2">
         <div className="flex flex-col border-gray-500 border-r-2 md:px-10 sm:px-4 py-16 text-[15px] gap-2 hover:text-white hover:bg-blue-400 duration-300 text-gray-700">
           <b>EFFICIENCY:</b>
-          <p>
-            Streamlined appointment scheduling that fits into your busy
-            lifestyle.
-          </p>
+          <p>Streamlined appointment scheduling that fits into your busy lifestyle.</p>
         </div>
         <div className="flex flex-col border-gray-500 border-r-2 md:px-10 sm:px-4 py-16 text-[15px] gap-2 hover:text-white hover:bg-blue-400 duration-300 text-gray-700">
           <b> CONVENIENCE:</b>
-          <p>
-            Access to a network of trusted healthcare professionals in your area
-          </p>
+          <p>Access to a network of trusted healthcare professionals in your area</p>
         </div>
         <div className="flex flex-col border-gray-500 sm:px-4 md:px-10 py-16 text-[15px] gap-2 hover:text-white hover:bg-blue-400 duration-300 text-gray-700">
           <b> PERSONALIZATION:</b>
-          <p>
-            Tailored recommendations and reminders to help you stay on top of
-            your health
-          </p>
+          <p>Tailored recommendations and reminders to help you stay on top of your health</p>
         </div>
       </div>
     </div>
