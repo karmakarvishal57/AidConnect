@@ -1,11 +1,11 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
 // API for doctor authentication
 const authDoctor = async (req, res, next) => {
   try {
     const { dtoken } = req.headers;
     if (!dtoken) {
-      return res.json({ success: false, message: "Not Authorized" });
+      return res.json({ success: false, message: 'Not Authorized' });
     }
 
     const token_decode = await jwt.verify(dtoken, process.env.JWT_SECRET);

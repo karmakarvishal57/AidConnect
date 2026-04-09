@@ -1,26 +1,17 @@
 //API for adding doctor
 
-const validator = require("validator");
-const bcrypt = require("bcrypt");
-const cloudinary = require("cloudinary").v2;
-const doctorModel = require("../models/doctorModel");
-const jwt = require("jsonwebtoken");
-const appointmentModel = require("../models/appointmentModel");
-const userModel = require("../models/userModel");
+const validator = require('validator');
+const bcrypt = require('bcrypt');
+const cloudinary = require('cloudinary').v2;
+const doctorModel = require('../models/doctorModel');
+const jwt = require('jsonwebtoken');
+const appointmentModel = require('../models/appointmentModel');
+const userModel = require('../models/userModel');
 
 const addDoctor = async (req, res) => {
   try {
-    const {
-      name,
-      email,
-      password,
-      speciality,
-      degree,
-      experience,
-      about,
-      fees,
-      address,
-    } = req.body;
+    const { name, email, password, speciality, degree, experience, about, fees, address } =
+      req.body;
 
     const imageFile = req.file;
 
@@ -36,17 +27,17 @@ const addDoctor = async (req, res) => {
       !address ||
       !imageFile
     ) {
-      res.json({ status: "failed", message: "Missing Details" });
+      res.json({ status: 'failed', message: 'Missing Details' });
     }
 
     //   VALIDATING EMAIL
     if (!validator.isEmail(email)) {
-      res.json({ status: "failed", message: "Please enter valid email" });
+      res.json({ status: 'failed', message: 'Please enter valid email' });
     }
 
     // VALIDATING STRONG PASSWORD
     if (password.length < 8) {
-      res.json({ status: "failed", message: "Please enter strong password" });
+      res.json({ status: 'failed', message: 'Please enter strong password' });
     }
 
     // hashing doctor password
@@ -55,7 +46,7 @@ const addDoctor = async (req, res) => {
 
     // upload image to cloudinary
     const uploadImage = await cloudinary.uploader.upload(imageFile.path, {
-      resource_type: "image",
+      resource_type: 'image',
     });
     const uploadImageUrl = uploadImage.secure_url;
 
@@ -75,7 +66,7 @@ const addDoctor = async (req, res) => {
 
     const doctor = new doctorModel(doctorData);
     await doctor.save();
-    res.json({ success: true, message: "Doctor Added" });
+    res.json({ success: true, message: 'Doctor Added' });
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
@@ -84,14 +75,11 @@ const addDoctor = async (req, res) => {
 const adminLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
-    if (
-      email === process.env.ADMIN_EMAIL &&
-      password === process.env.ADMIN_PASSWORD
-    ) {
+    if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
       const token = jwt.sign(email + password, process.env.JWT_SECRET);
       res.json({ success: true, token });
     } else {
-      res.json({ success: false, message: "Invalid Credentials" });
+      res.json({ success: false, message: 'Invalid Credentials' });
     }
   } catch (error) {
     res.json({ success: false, message: error.message });
@@ -102,7 +90,7 @@ const adminLogin = async (req, res) => {
 
 const allDoctors = async (req, res) => {
   try {
-    const doctorsData = await doctorModel.find().select("-password");
+    const doctorsData = await doctorModel.find().select('-password');
     res.json({ success: true, doctorsData });
   } catch (err) {
     res.json({ success: false, message: err.message });
@@ -136,21 +124,19 @@ const cancelAppointment = async (req, res) => {
 
       let { slots_booked } = docData;
 
-      let indexToRemove = slots_booked[slotDate].findIndex(
-        (item) => item === slotTime
-      );
+      let indexToRemove = slots_booked[slotDate].findIndex((item) => item === slotTime);
       slots_booked[slotDate].splice(indexToRemove, 1);
 
       await doctorModel.findByIdAndUpdate(docId, { slots_booked });
 
       return res.json({
         success: true,
-        message: "Appointment Cancelled",
+        message: 'Appointment Cancelled',
       });
     } else {
       return res.json({
         success: false,
-        message: "Appointment Not Found Or Cancelled",
+        message: 'Appointment Not Found Or Cancelled',
       });
     }
   } catch (error) {
@@ -178,7 +164,7 @@ const adminDashboard = async (req, res) => {
   }
 };
 
-module.exports = { 
+module.exports = {
   addDoctor,
   adminLogin,
   allDoctors,

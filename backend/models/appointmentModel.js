@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const appointmentSchema = new mongoose.Schema({
   docId: {
@@ -42,7 +42,6 @@ const appointmentSchema = new mongoose.Schema({
 });
 
 const appointmentModel =
-  mongoose.models.appointment ||
-  mongoose.model("Appointment", appointmentSchema);
+  mongoose.models.appointment || mongoose.model('Appointment', appointmentSchema);
 
-module.exports = appointmentModel;                           
+module.exports = appointmentModel;

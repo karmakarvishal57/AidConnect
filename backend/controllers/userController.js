@@ -1,11 +1,11 @@
-const validator = require("validator");
-const bcrypt = require("bcrypt");
-const userModel = require("../models/userModel");
-const jwt = require("jsonwebtoken");
-const doctorModel = require("../models/doctorModel");
-const appointmentModel = require("../models/appointmentModel");
-const cloudinary = require("cloudinary").v2;
-const Razorpay = require("razorpay");
+const validator = require('validator');
+const bcrypt = require('bcrypt');
+const userModel = require('../models/userModel');
+const jwt = require('jsonwebtoken');
+const doctorModel = require('../models/doctorModel');
+const appointmentModel = require('../models/appointmentModel');
+const cloudinary = require('cloudinary').v2;
+const Razorpay = require('razorpay');
 
 //API for user register
 const registerUser = async (req, res) => {
@@ -15,21 +15,21 @@ const registerUser = async (req, res) => {
     if (searchUser) {
       return res.json({
         success: false,
-        message: "User already exists ! Please Log in",
+        message: 'User already exists ! Please Log in',
       });
     }
     if (!name || !email || !password) {
-      res.json({ success: false, message: "Missing Credentials" });
+      res.json({ success: false, message: 'Missing Credentials' });
     }
 
     //   validating email
     if (!validator.isEmail(email)) {
-      return res.json({ success: false, message: "Enter valid email" });
+      return res.json({ success: false, message: 'Enter valid email' });
     }
 
     //   validating password
     if (password.length < 8) {
-      return res.json({ success: false, message: "Enter strong password" });
+      return res.json({ success: false, message: 'Enter strong password' });
     }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -54,7 +54,7 @@ const loginUser = async (req, res) => {
     const { email, password } = req.body;
     const user = await userModel.findOne({ email });
     if (!user) {
-      return res.json({ success: false, message: "User does not exist" });
+      return res.json({ success: false, message: 'User does not exist' });
     }
     const isMatch = await bcrypt.compare(password, user?.password);
 
@@ -65,7 +65,7 @@ const loginUser = async (req, res) => {
     }
     return res.json({
       success: false,
-      message: "Invalid Credentials",
+      message: 'Invalid Credentials',
     });
   } catch (error) {
     res.json({ success: false, message: error.message });
@@ -92,7 +92,7 @@ const updateProfile = async (req, res) => {
     const imageFile = req.file;
 
     if (!name || !dob || !address || !phone || !gender) {
-      return res.json({ success: false, message: "Missing data" });
+      return res.json({ success: false, message: 'Missing data' });
     }
 
     await userModel.findByIdAndUpdate(userId, {
@@ -105,7 +105,7 @@ const updateProfile = async (req, res) => {
 
     if (imageFile) {
       const uploadImage = await cloudinary.uploader.upload(imageFile.path, {
-        resource_type: "image",
+        resource_type: 'image',
       });
       const uploadImageUrl = uploadImage.secure_url;
 
@@ -114,7 +114,7 @@ const updateProfile = async (req, res) => {
 
     res.json({
       success: true,
-      message: "Profile Updated",
+      message: 'Profile Updated',
     });
   } catch (error) {
     res.json({ success: false, message: error.message });
@@ -129,15 +129,15 @@ const bookAppointment = async (req, res) => {
 
     const docData = await doctorModel.findById(docId).select({ password: 0 });
     if (!docData) {
-      return res.json({ success: false, message: "Doctor not found" });
+      return res.json({ success: false, message: 'Doctor not found' });
     }
     if (!docData?.available) {
-      return res.json({ success: false, message: "Doctor not available" });
+      return res.json({ success: false, message: 'Doctor not available' });
     }
     let { slots_booked } = docData;
     if (slots_booked[slotDate]) {
       if (slots_booked[slotDate].includes(slotTime)) {
-        return res.json({ success: false, message: "Slot not available" });
+        return res.json({ success: false, message: 'Slot not available' });
       } else {
         slots_booked[slotDate].push(slotTime);
       }
@@ -148,9 +148,7 @@ const bookAppointment = async (req, res) => {
 
     delete docData.slots_booked;
 
-    const userData = await userModel
-      .findOne({ _id: userId })
-      .select("-password");
+    const userData = await userModel.findOne({ _id: userId }).select('-password');
 
     const appointmentData = {
       userId,
@@ -172,7 +170,7 @@ const bookAppointment = async (req, res) => {
 
     return res.json({
       success: true,
-      message: "Your appointment has been booked",
+      message: 'Your appointment has been booked',
     });
   } catch (error) {
     return res.json({ success: false, message: error.message });
@@ -196,7 +194,7 @@ const cancelAppointment = async (req, res) => {
     const { userId, appointmentId } = req?.body;
     const appointmentData = await appointmentModel.findById(appointmentId);
     if (appointmentData?.userId !== userId) {
-      return res.json({ success: false, message: "Unauthorized Action" });
+      return res.json({ success: false, message: 'Unauthorized Action' });
     }
     await appointmentModel.findByIdAndUpdate(appointmentId, {
       cancelled: true,
@@ -208,16 +206,14 @@ const cancelAppointment = async (req, res) => {
 
     let { slots_booked } = docData;
 
-    let indexToRemove = slots_booked[slotDate].findIndex(
-      (item) => item === slotTime
-    );
+    let indexToRemove = slots_booked[slotDate].findIndex((item) => item === slotTime);
     slots_booked[slotDate].splice(indexToRemove, 1);
 
     await doctorModel.findByIdAndUpdate(docId, { slots_booked });
 
     return res.json({
       success: true,
-      message: "Appointment Cancelled",
+      message: 'Appointment Cancelled',
     });
   } catch (error) {
     return res.json({ success: false, message: error.message });
@@ -239,7 +235,7 @@ const razorpay_Payment = async (req, res) => {
     if (!appointment || appointment?.cancelled) {
       return res.json({
         success: false,
-        message: "Appointment cancelled or not found",
+        message: 'Appointment cancelled or not found',
       });
     }
 
@@ -262,13 +258,13 @@ const verifyPayment = async (req, res) => {
   try {
     const { razorpay_order_id } = req.body;
     const orderInfo = await razorpayInstance.orders.fetch(razorpay_order_id);
-    if (orderInfo.status === "paid") {
+    if (orderInfo.status === 'paid') {
       await appointmentModel.findByIdAndUpdate(orderInfo.receipt, {
-        payment: "true",
+        payment: 'true',
       });
-      return res.json({ success: true, message: "Payment Successful" });
+      return res.json({ success: true, message: 'Payment Successful' });
     } else {
-      return res.json({ success: false, message: "Payment Unsuccessful" });
+      return res.json({ success: false, message: 'Payment Unsuccessful' });
     }
   } catch (error) {
     return res.json({ success: false, message: error.message });

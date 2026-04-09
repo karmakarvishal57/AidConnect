@@ -1,14 +1,14 @@
 // user authentication middleware
 
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
 const authUser = async (req, res, next) => {
   try {
     const { token } = req.headers;
     if (!token) {
       res.json({
-        success: "false",
-        mesaage: "Not authorized please login again",
+        success: 'false',
+        mesaage: 'Not authorized please login again',
       });
     }
 
@@ -17,7 +17,7 @@ const authUser = async (req, res, next) => {
     req.body.userId = token_decode.id;
     next();
   } catch (error) {
-    res.json({ success: "false", message: error.message });
+    res.json({ success: 'false', message: error.message });
   }
 };
 
