@@ -105,3 +105,5 @@ const AdminContextProvider = (props) => {
 
   return <AdminContext.Provider value={value}>{props.children}</AdminContext.Provider>;
 };
+
+export default AdminContextProvider;
