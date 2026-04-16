@@ -6,7 +6,7 @@ const DoctorsList = () => {
     useContext(AdminContext);
   useEffect(() => {
     getAllDoctors();
-  }, [aToken]);
+  }, [aToken,getAllDoctors]);
   return (
     <div className="p-4  max-h-[90vh] overflow-y-scroll ">
       <h1 className="text-xl font-medium">All Doctors</h1>

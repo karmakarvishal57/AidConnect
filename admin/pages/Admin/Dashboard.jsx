@@ -14,10 +14,12 @@ const Dashboard = () => {
     backendURL,
     getAllAppointments,
   } = useContext(AdminContext);
+
   const { dateOfAppointment } = useContext(AppContext);
+
   useEffect(() => {
     getDashboardData();
-  }, [aToken]);
+  }, [aToken,getDashboardData]);
 
   const cancelAppointment = async (appointmentId) => {
     try {

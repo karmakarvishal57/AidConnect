@@ -1,20 +1,19 @@
-import { useContext } from "react";
-import { DoctorContext } from "../../context/DoctorContext";
-import axios from "axios";
-import { toast } from "react-toastify";
-import { useEffect } from "react";
-import { useState } from "react";
-import { assets } from "../../src/assets_admin/assets";
-import { AppContext } from "../../context/AppContext";
+import { useContext } from 'react';
+import { DoctorContext } from '../../context/DoctorContext';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { assets } from '../../src/assets_admin/assets';
+import { AppContext } from '../../context/AppContext';
 
 const DoctorDashboard = () => {
-  const { backendURL, dToken, cancelAppointment, completeAppointment } =
-    useContext(DoctorContext);
+  const { backendURL, dToken, cancelAppointment, completeAppointment } = useContext(DoctorContext);
   const { dateOfAppointment, currency } = useContext(AppContext);
   const [dashData, setDashData] = useState([]);
   const dashBoardData = async () => {
     try {
-      const { data } = await axios.get(backendURL + "/api/doctor/dashBoard", {
+      const { data } = await axios.get(backendURL + '/api/doctor/dashBoard', {
         headers: { dToken },
       });
       if (data.success) {
@@ -23,12 +22,16 @@ const DoctorDashboard = () => {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(data.message);
+      toast.error(error.message);
     }
   };
 
   useEffect(() => {
-    dashBoardData();
+    const fetchDashData = async () => {
+      await dashBoardData();
+    };
+
+    fetchDashData();
   }, [dToken]);
 
   return (
@@ -38,7 +41,7 @@ const DoctorDashboard = () => {
           <div className="flex items-center gap-2 min-w-50 bg-white rounded border-2 border-gray-200 hover:cursor-pointer hover:scale-105 transition-all p-4">
             <img width="56px" src={assets.doctor_icon} alt="" />
             <div>
-              <p className="text-lg">{dashData?.earnings + " " + currency}</p>
+              <p className="text-lg">{dashData?.earnings + ' ' + currency}</p>
               <p>Earnings</p>
             </div>
           </div>
@@ -68,23 +71,15 @@ const DoctorDashboard = () => {
                 key={index}
                 className="flex items-center gap-4 px-6 py-3 text-sm border-b border-b-gray-300"
               >
-                <img
-                  className="w-14 rounded-full "
-                  src={item?.userData?.image}
-                  alt=""
-                />
+                <img className="w-14 rounded-full " src={item?.userData?.image} alt="" />
                 <div className="flex-1 text-sm font-semibold">
                   <p className="text-gray-800">{item?.userData?.name}</p>
-                  <p className="text-gray-600 text-xs">
-                    {dateOfAppointment(item?.slotDate)}
-                  </p>
+                  <p className="text-gray-600 text-xs">{dateOfAppointment(item?.slotDate)}</p>
                 </div>
                 {item.cancelled ? (
                   <p className="text-red-400 text-xs font-medium ">Cancelled</p>
                 ) : item.isCompleted ? (
-                  <p className="text-green-400 text-xs font-medium">
-                    Completed
-                  </p>
+                  <p className="text-green-400 text-xs font-medium">Completed</p>
                 ) : (
                   <div className="flex gap-2">
                     <button

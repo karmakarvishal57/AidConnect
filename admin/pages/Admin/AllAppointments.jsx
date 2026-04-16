@@ -1,20 +1,19 @@
-import React from "react";
-import { useContext, useEffect } from "react";
-import { AdminContext } from "../../context/AdminContext";
-import { AppContext } from "../../context/AppContext";
-import axios from "axios";
-import { toast } from "react-toastify";
+import React from 'react';
+import { useContext, useEffect } from 'react';
+import { AdminContext } from '../../context/AdminContext';
+import { AppContext } from '../../context/AppContext';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 const AllAppointments = () => {
-  const { appointments, aToken, backendURL, getAllAppointments } =
-    useContext(AdminContext);
+  const { appointments, aToken, backendURL, getAllAppointments } = useContext(AdminContext);
   const { calculateAge, dateOfAppointment, currency } = useContext(AppContext);
 
   const cancelAppointment = async (appointmentId) => {
     try {
       const { data } = await axios.put(
-        backendURL + "/api/admin/cancel-appointment",
+        backendURL + '/api/admin/cancel-appointment',
         { appointmentId },
-        { headers: { aToken } }
+        { headers: { aToken } },
       );
       if (data?.success) {
         toast.success(data.message);
@@ -23,7 +22,7 @@ const AllAppointments = () => {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(data.message);
+      toast.error(error.message);
     }
   };
   return (
@@ -43,11 +42,7 @@ const AllAppointments = () => {
           <div className=" grid max-md:gap-4 sm:grid-cols-[0.5fr_3fr_1fr_3fr_3fr_1fr_1fr] max-sm:grid-cols-[2fr_1fr_2fr] px-6 py-3  items-center border-b border-gray-300 hover:bg-gray-50">
             <p className="max-sm:hidden">{index + 1}</p>
             <div className="flex items-center gap-2">
-              <img
-                src={item?.userData?.image}
-                alt=""
-                className=" w-8 rounded-full"
-              />
+              <img src={item?.userData?.image} alt="" className=" w-8 rounded-full" />
               <p>{item?.userData?.name}</p>
             </div>
             <p>{calculateAge(item?.userData?.dob)}</p>
@@ -62,7 +57,7 @@ const AllAppointments = () => {
               />
               <p>{item?.docData?.name}</p>
             </div>
-            <p>{currency + " " + item?.docData.fees}</p>
+            <p>{currency + ' ' + item?.docData.fees}</p>
             {item?.cancelled ? (
               <p className="text-red-400 text-xs">Cancelled</p>
             ) : !item.isCompleted ? (
