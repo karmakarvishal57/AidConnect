@@ -1,32 +1,27 @@
-import React from "react";
-import { useContext } from "react";
-import { AdminContext } from "../../context/AdminContext";
-import { useEffect } from "react";
-import { assets } from "../../src/assets_admin/assets";
-import { AppContext } from "../../context/AppContext";
-import axios from "axios";
-
+import React from 'react';
+import { useContext } from 'react';
+import { AdminContext } from '../../context/AdminContext';
+import { useEffect } from 'react';
+import { assets } from '../../src/assets_admin/assets';
+import { AppContext } from '../../context/AppContext';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 const Dashboard = () => {
-  const {
-    aToken,
-    dashboardData,
-    getDashboardData,
-    backendURL,
-    getAllAppointments,
-  } = useContext(AdminContext);
+  const { aToken, dashboardData, getDashboardData, backendURL, getAllAppointments } =
+    useContext(AdminContext);
 
   const { dateOfAppointment } = useContext(AppContext);
 
   useEffect(() => {
     getDashboardData();
-  }, [aToken,getDashboardData]);
+  }, [aToken, getDashboardData]);
 
   const cancelAppointment = async (appointmentId) => {
     try {
       const { data } = await axios.put(
-        backendURL + "/api/admin/cancel-appointment",
+        backendURL + '/api/admin/cancel-appointment',
         { appointmentId },
-        { headers: { aToken } }
+        { headers: { aToken } },
       );
       if (data?.success) {
         toast.success(data.message);
@@ -35,7 +30,7 @@ const Dashboard = () => {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(data.message);
+      toast.error(error.message);
     }
   };
   return (
@@ -75,16 +70,10 @@ const Dashboard = () => {
                 key={index}
                 className="flex items-center gap-4 px-6 py-3 text-sm border-b border-b-gray-300"
               >
-                <img
-                  className="w-14 rounded-full "
-                  src={item?.docData?.image}
-                  alt=""
-                />
+                <img className="w-14 rounded-full " src={item?.docData?.image} alt="" />
                 <div className="flex-1 text-sm font-semibold">
                   <p className="text-gray-800">{item?.docData?.name}</p>
-                  <p className="text-gray-600 text-xs">
-                    {dateOfAppointment(item?.slotDate)}
-                  </p>
+                  <p className="text-gray-600 text-xs">{dateOfAppointment(item?.slotDate)}</p>
                 </div>
                 {item.cancelled ? (
                   <p className="font-semibold text-red-400">Cancelled</p>
