@@ -1,14 +1,14 @@
-import axios from "axios";
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { createContext } from "react";
-import { toast } from "react-toastify";
+import axios from 'axios';
+import React, { useState } from 'react';
+import { useEffect } from 'react';
+import { createContext } from 'react';
+import { toast } from 'react-toastify';
 
 export const AdminContext = createContext();
 
 const AdminContextProvider = (props) => {
   const [aToken, setAToken] = useState(
-    localStorage.getItem("aToken") ? localStorage.getItem("aToken") : ""
+    localStorage.getItem('aToken') ? localStorage.getItem('aToken') : '',
   );
   const [doctors, setDoctors] = useState([]);
   const [appointments, setAppointments] = useState([]);
@@ -18,7 +18,7 @@ const AdminContextProvider = (props) => {
 
   async function getAllDoctors() {
     try {
-      const { data } = await axios.get(backendURL + "/api/admin/all-doctors", {
+      const { data } = await axios.get(backendURL + '/api/admin/all-doctors', {
         headers: { aToken },
       });
       if (data.success) {
@@ -33,12 +33,9 @@ const AdminContextProvider = (props) => {
 
   async function getAllAppointments() {
     try {
-      const { data } = await axios.get(
-        backendURL + "/api/admin/all-appointments",
-        {
-          headers: { aToken },
-        }
-      );
+      const { data } = await axios.get(backendURL + '/api/admin/all-appointments', {
+        headers: { aToken },
+      });
       if (data?.success) {
         setAppointments(data?.appointmentData);
       } else {
@@ -52,11 +49,11 @@ const AdminContextProvider = (props) => {
   async function changeAvailability(docId) {
     try {
       const { data } = await axios.post(
-        backendURL + "/api/admin/change-availability",
+        backendURL + '/api/admin/change-availability',
         { docId },
         {
           headers: { aToken },
-        }
+        },
       );
       if (data.success) {
         getAllDoctors();
@@ -71,7 +68,7 @@ const AdminContextProvider = (props) => {
 
   async function getDashboardData() {
     try {
-      const { data } = await axios.get(backendURL + "/api/admin/dashboard", {
+      const { data } = await axios.get(backendURL + '/api/admin/dashboard', {
         headers: { aToken },
       });
 
@@ -86,8 +83,12 @@ const AdminContextProvider = (props) => {
   }
 
   useEffect(() => {
-    getAllAppointments();
-  }, [aToken]);
+    const fetchAppointments = async () => {
+      await getAllAppointments();
+    };
+
+    fetchAppointments();
+  }, [aToken, getAllAppointments]);
 
   const value = {
     aToken,
@@ -102,11 +103,7 @@ const AdminContextProvider = (props) => {
     getDashboardData,
   };
 
-  return (
-    <AdminContext.Provider value={value}>
-      {props.children}
-    </AdminContext.Provider>
-  );
+  return <AdminContext.Provider value={value}>{props.children}</AdminContext.Provider>;
 };
 
 export default AdminContextProvider;
