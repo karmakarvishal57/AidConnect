@@ -10,8 +10,10 @@ services:
 
   frontend:
     build:
-      ./frontend
+      context: ./frontend
       # need docker file in frontend folder to build the image
+      args:
+       VITE_BACKEND_URL: "http://56.228.35.26:3000"
     container_name: frontend
     restart: always
     env_file: ./frontend/.env
@@ -22,8 +24,10 @@ services:
 
   admin:
     build:
-      ./admin
+      context: ./admin
       # need docker file in admin folder to build the image
+      args:
+       VITE_BACKEND_URL: "http://56.228.35.26:3000"
     container_name: admin
     restart: always
     env_file: ./admin/.env

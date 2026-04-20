@@ -40,7 +40,7 @@ const DoctorProfile = () => {
     if (dToken) {
       getDoctorProfile();
     }
-  }, [dToken]);
+  }, [dToken,getDoctorProfile]);
 
   return (
     <div className="m-5">

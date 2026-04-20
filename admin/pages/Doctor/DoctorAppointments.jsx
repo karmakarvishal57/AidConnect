@@ -18,7 +18,7 @@ const DoctorAppointments = () => {
 
   useEffect(() => {
     getAllAppointments();
-  }, [dToken]);
+  }, [dToken,getAllAppointments]);
 
   return (
     <div className="m-5 max-w-5xl">

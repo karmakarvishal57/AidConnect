@@ -71,7 +71,7 @@ const MyAppointments = () => {
             toast.error(data.message);
           }
         } catch (error) {
-          toast.error(data.message);
+          toast.error(error.message);
         }
       },
     };
@@ -107,7 +107,7 @@ const MyAppointments = () => {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(data.message);
+      toast.error(error.message);
     }
   }
   useEffect(() => {
@@ -118,8 +118,8 @@ const MyAppointments = () => {
       <p className="border-b-2 border-gray-400 py-4 font-medium">My Appointments</p>
       <div>
         {appointment.map((item, idx) => (
-          <div className="grid grid-cols-[1fr_2fr] text-sm gap-4 py-4 border-b-2 border-gray-300 sm:flex ">
-            <div key={idx} className="sm:w-30 ">
+          <div key={idx} className="grid grid-cols-[1fr_2fr] text-sm gap-4 py-4 border-b-2 border-gray-300 sm:flex ">
+            <div  className="sm:w-30 ">
               <img
                 src={item?.docData?.image}
                 alt={'doctors_img'}

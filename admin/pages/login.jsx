@@ -5,13 +5,15 @@ import { toast } from "react-toastify";
 import { DoctorContext } from "../context/DoctorContext";
 import { useNavigate } from "react-router-dom";
 
-const login = () => {
+const Login = () => {
   const [state, setState] = useState("Admin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { setAToken, backendURL } = useContext(AdminContext);
   const { setDToken } = useContext(DoctorContext);
+
   const navigate = useNavigate();
+
   async function onSubmitHandler(e) {
     e.preventDefault();
     try {
@@ -113,4 +115,4 @@ const login = () => {
   );
 };
 
-export default login;
+export default Login;
