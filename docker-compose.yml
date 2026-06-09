@@ -16,18 +16,6 @@ services:
     container_name: backend
     restart: unless-stopped
     env_file: ./backend/.env
-    environment:
-      - PORT=${PORT}
-      - URI=${URI}
-      - CLOUDINARY_NAME=${CLOUDINARY_NAME}
-      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
-      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
-      - ADMIN_EMAIL=${ADMIN_EMAIL}
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
-      - JWT_SECRET=${JWT_SECRET}
-      - RAZORPAY_API_KEY=${RAZORPAY_API_KEY}
-      - RAZORPAY_SECRET_KEY=${RAZORPAY_SECRET_KEY}
-      - CURRENCY=${CURRENCY}
     ports:
       - "3000:3000"
     depends_on:
@@ -46,7 +34,7 @@ services:
         VITE_BACKEND_URL: "http://localhost:3000"
     container_name: frontend
     restart: unless-stopped
-    env_file: ./frontend/.env
+    # env_file: ./frontend/.env
     depends_on:
       - backend
     ports:
@@ -66,7 +54,7 @@ services:
         VITE_BACKEND_URL: "http://localhost:3000"
     container_name: admin
     restart: always
-    env_file: ./admin/.env
+    # env_file: ./admin/.env
     depends_on:
       - backend
     ports:

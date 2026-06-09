@@ -1,3 +1,4 @@
+/* groovylint-disable NestedBlockDepth */
 pipeline {
     agent any
 
@@ -57,13 +58,31 @@ pipeline {
                         string(credentialsId:'CURRENCY', variable:'CURRENCY')
                     ]) {
                         sh '''
+                            echo "Creating backend .env file..."
+
+                            cat > backend/.env <<EOF
+PORT=$PORT
+URI=$URI
+CLOUDINARY_NAME=$CLOUDINARY_NAME
+CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY
+CLOUDINARY_API_SECRET_KEY=$CLOUDINARY_API_SECRET_KEY
+ADMIN_EMAIL=$ADMIN_EMAIL
+ADMIN_PASSWORD=$ADMIN_PASSWORD
+JWT_SECRET=$JWT_SECRET
+RAZORPAY_API_KEY=$razorpay_api_key
+RAZORPAY_SECRET_KEY=$razorpay_secret_key
+CURRENCY=$CURRENCY
+EOF
+
+                            echo ".env file created successfully"
+
                             docker-compose up -d
 
                             echo "Waiting for services to start..."
                             sleep 30
 
                             docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
-                        '''
+                       '''
                     }
                 }
             }
