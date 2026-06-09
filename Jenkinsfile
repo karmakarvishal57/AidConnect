@@ -4,7 +4,7 @@ pipeline {
     environment {
         BACKEND_IMAGE = 'aidconnect-backend:jenkins'
         FRONTEND_IMAGE = 'aidconnect-frontend:jenkins'
-        ADMIN_IMAGE    = 'aidconnect-admin:jenkins'
+        ADMIN_IMAGE = 'aidconnect-admin:jenkins'
         DOCKER_REGISTRY = 'vish57'
     }
 
@@ -43,12 +43,46 @@ pipeline {
                 echo 'Starting MERN application...'
 
                 script {
-                    sh 'docker-compose up -d'
+                    withCredentials([
+                        string(credentialsId:'URI', variable:'URI'),
+                        string(credentialsId:'PORT', variable:'PORT'),
+                        string(credentialsId:'CLOUDINARY_NAME', variable:'CLOUDINARY_NAME'),
+                        string(credentialsId:'CLOUDINARY_API_KEY', variable:'CLOUDINARY_API_KEY'),
+                        string(credentialsId:'CLOUDINARY_API_SECRET_KEY', variable:'CLOUDINARY_API_SECRET_KEY'),
+                        string(credentialsId:'ADMIN_EMAIL', variable:'ADMIN_EMAIL'),
+                        string(credentialsId:'ADMIN_PASSWORD', variable:'ADMIN_PASSWORD'),
+                        string(credentialsId:'JWT_SECRET', variable:'JWT_SECRET'),
+                        string(credentialsId:'razorpay_api_key', variable:'razorpay_api_key'),
+                        string(credentialsId:'razorpay_secret_key', variable:'razorpay_secret_key'),
+                        string(credentialsId:'CURRENCY', variable:'CURRENCY')
+                    ]) {
+                        sh """
+                            echo "Creating backend .env file..."
 
-                    echo 'Waiting for services to start...'
-                    sleep(time: 30, unit: 'SECONDS')
+                            cat > backend/.env <<EOF
+PORT=$PORT
+URI=$URI
+CLOUDINARY_NAME=$CLOUDINARY_NAME
+CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY
+CLOUDINARY_API_SECRET_KEY=$CLOUDINARY_API_SECRET_KEY
+ADMIN_EMAIL=$ADMIN_EMAIL
+ADMIN_PASSWORD=$ADMIN_PASSWORD
+JWT_SECRET=$JWT_SECRET
+RAZORPAY_API_KEY=$razorpay_api_key
+RAZORPAY_SECRET_KEY=$razorpay_secret_key
+CURRENCY=$CURRENCY
+EOF
 
-                    sh 'docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"'
+                            echo ".env file created successfully"
+
+                            docker-compose up -d
+
+                            echo "Waiting for services to start..."
+                            sleep 30
+
+                            docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
+                        """
+                    }
                 }
             }
         }
@@ -59,36 +93,36 @@ pipeline {
 
                 script {
                     sh '''
-                    curl -f http://localhost:3000 || {
-                        echo "Backend health check failed"
-                        exit 1
-                    }
-                    echo "Backend is healthy"
-                '''
+                        curl -f http://localhost:3000 || {
+                            echo "Backend health check failed"
+                            exit 1
+                        }
+                        echo "Backend is healthy"
+                    '''
 
                     sh '''
-                    curl -f http://localhost:5173 || {
-                        echo "Frontend health check failed"
-                        exit 1
-                    }
-                    echo "Frontend is accessible"
-                '''
+                        curl -f http://localhost:5173 || {
+                            echo "Frontend health check failed"
+                            exit 1
+                        }
+                        echo "Frontend is accessible"
+                    '''
 
                     sh '''
-                    curl -f http://localhost:5174 || {
-                        echo "Admin health check failed"
-                        exit 1
-                    }
-                    echo "Admin is accessible"
-                '''
+                        curl -f http://localhost:5174 || {
+                            echo "Admin health check failed"
+                            exit 1
+                        }
+                        echo "Admin is accessible"
+                    '''
 
                     sh '''
-                    curl -f http://localhost:3000/health || {
-                        echo "Database connection failed"
-                        exit 1
-                    }
-                    echo "Database is connected"
-                '''
+                        curl -f http://localhost:3000/health || {
+                            echo "Database connection failed"
+                            exit 1
+                        }
+                        echo "Database is connected"
+                    '''
                 }
             }
         }
@@ -97,13 +131,13 @@ pipeline {
             steps {
                 script {
                     sh '''
-            curl -f http://localhost:3000/api/user || {
-                echo "User API test failed"
-                exit 1
-            }
+                        curl -f http://localhost:3000/api/user || {
+                            echo "User API test failed"
+                            exit 1
+                        }
 
-            echo "User API accessible"
-            '''
+                        echo "User API accessible"
+                    '''
                 }
             }
         }
@@ -114,15 +148,15 @@ pipeline {
 
                 script {
                     sh '''
-                    echo "Checking API response time..."
-                    time curl -s http://localhost:3000/api/doctor/list > /dev/null
+                        echo "Checking API response time..."
+                        time curl -s http://localhost:3000/api/doctor/list > /dev/null
 
-                    echo "Checking frontend load time ..."
-                    time curl -s http://localhost:5173 > /dev/null
+                        echo "Checking frontend load time ..."
+                        time curl -s http://localhost:5173 > /dev/null
 
-                    echo "Checking admin load time ..."
-                    time curl -s http://localhost:5174 > /dev/null
-                '''
+                        echo "Checking admin load time ..."
+                        time curl -s http://localhost:5174 > /dev/null
+                    '''
                 }
             }
         }
@@ -134,15 +168,15 @@ pipeline {
 
             script {
                 sh '''
-                echo "Stopping application containers..."
-                docker compose down || true
+                    echo "Stopping application containers..."
+                    docker compose down || true
 
-                echo "Removing test containers..."
-                docker ps -aq --filter "label=jenkins-test" | xargs -r docker rm -f
+                    echo "Removing test containers..."
+                    docker ps -aq --filter "label=jenkins-test" | xargs -r docker rm -f
 
-                echo "Cleaning up unused images..."
-                docker image prune -f || true
-            '''
+                    echo "Cleaning up unused images..."
+                    docker image prune -f || true
+                '''
             }
         }
 
@@ -151,7 +185,7 @@ pipeline {
 
             script {
                 sh '''
-                echo "Build #$(BUILD_NUMBER) succeeded at $(date)"
+                    echo "Build #$BUILD_NUMBER succeeded at $(date)"
                 '''
             }
         }
@@ -161,9 +195,9 @@ pipeline {
 
             script {
                 sh '''
-                echo "Capturing container logs for debugging..."
-                docker compose logs || true
-            '''
+                    echo "Capturing container logs for debugging..."
+                    docker compose logs || true
+                '''
             }
         }
 
