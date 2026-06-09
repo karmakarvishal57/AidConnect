@@ -22,6 +22,7 @@ services:
       - mongo
     networks:
       - mern-net
+      
   frontend:
     build:
       # context: ./frontend

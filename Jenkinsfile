@@ -83,7 +83,7 @@ pipeline {
                 '''
 
                     sh '''
-                    curl -f http://localhost:3000 || {
+                    curl -f http://localhost:3000/health || {
                         echo "Database connection failed"
                         exit 1
                     }
@@ -93,33 +93,20 @@ pipeline {
             }
         }
 
-        stage('Integration Tests') {
-            steps {
-                echo 'Running integration tests...'
-
-                script {
-                    sh '''
-                    echo "Creating test task..."
-
-                    curl -X POST http://localhost:5000/api/tasks \
-                        -H "Content-Type: application/json" \
-                        -d '{"title":"Jenkins CI Test Task","completed":false}' \
-                        -f || exit 1
-                '''
-
-                    sh '''
-                    echo "Verifying task creation..."
-
-                    curl -s http://localhost:5000/api/tasks | \
-                    grep "Jenkins CI Test Task" || {
-                        echo "Task creation test failed"
-                        exit 1
-                    }
-
-                    echo "Integration test passed"
-                '''
-                }
+       stage('Integration Tests') {
+    steps {
+        script {
+            sh '''
+            curl -f http://localhost:3000/api/user || {
+                echo "User API test failed"
+                exit 1
             }
+
+            echo "User API accessible"
+            '''
+        }
+    }
+}
         }
 
         stage('Performance Check') {
@@ -129,10 +116,13 @@ pipeline {
                 script {
                     sh '''
                     echo "Checking API response time..."
-                    time curl -s http://localhost:3000 > /dev/null
+                    time curl -s http://localhost:3000/api/doctor/list > /dev/null
 
-                    echo "Checking frontend load time..."
+                    echo "Checking frontend load time ..."
                     time curl -s http://localhost:5173 > /dev/null
+
+                    echo "Checking admin load time ..."
+                    time curl -s http://localhost:5174 > /dev/null
                 '''
                 }
             }

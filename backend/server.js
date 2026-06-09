@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const connectToDb = require('./config/mongoose');
 const connectCloudinary = require('./config/cloudinary');
+const mongoose = require('mongoose');
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -26,6 +27,20 @@ app.use(cors());
 app.use('/api/admin', adminRouter);
 app.use('/api/doctor', doctorRouter);
 app.use('/api/user', userRouter);
+
+app.get('/health', (req, res) => {
+  const states = {
+    0: 'DISCONNECTED',
+    1: 'CONNECTED',
+    2: 'CONNECTING',
+    3: 'DISCONNECTING',
+  };
+
+  const dbState = mongoose.connection.readyState;
+  res
+    .status(dbState === 1 ? 200 : 500)
+    .json({ status: dbState === 1 ? 'UP' : 'DOWN', db: states[dbState] });
+});
 
 app.get('/', (req, res) => res.json('Hello Server'));
 
