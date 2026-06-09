@@ -13,6 +13,6 @@ ENV VITE_BACKEND_URL=$VITE_BACKEND_URL
 
 RUN npm run build 
 
-EXPOSE 5173
+EXPOSE 5174
 
 CMD ["npm", "run", "preview"]

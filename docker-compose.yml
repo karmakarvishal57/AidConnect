@@ -1,33 +1,57 @@
 services:
+  mongo:
+    image: mongo:6.0
+    container_name: mongo
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - mern-net
+
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     #need docker file in backend folder to build the image
     container_name: backend
-    restart: always
+    restart: unless-stopped
     env_file: ./backend/.env
     ports:
       - "3000:3000"
-
+    depends_on:
+      - mongo
+    networks:
+      - mern-net
   frontend:
     build:
+      # context: ./frontend
+      # in case of only one dockerfile in the root folder we can directly give the path to the dockerfile without context but in case of multiple dockerfiles or args we need to give the context and dockerfile path separately(if multiple)
       context: ./frontend
+      dockerfile: Dockerfile
       # need docker file in frontend folder to build the image
       args:
-       VITE_BACKEND_URL: "http://56.228.35.26:3000"
+        #  VITE_BACKEND_URL: "http://56.228.35.26:3000" for ec3
+        VITE_BACKEND_URL: "http://localhost:3000"
     container_name: frontend
-    restart: always
+    restart: unless-stopped
     env_file: ./frontend/.env
     depends_on:
       - backend
     ports:
       - 5170:5173
+    networks:
+      - mern-net
 
   admin:
     build:
+      # context: ./admin
+      # in case of only one dockerfile in the root folder we can directly give the path to the dockerfile without context but in case of multiple dockerfiles or args we need to give the context and dockerfile path separately(if multiple)
       context: ./admin
+      dockerfile: Dockerfile
       # need docker file in admin folder to build the image
       args:
-       VITE_BACKEND_URL: "http://56.228.35.26:3000"
+        # VITE_BACKEND_URL: " http://56.228.35.26:3000 " for ec3
+        VITE_BACKEND_URL: "http://localhost:3000"
     container_name: admin
     restart: always
     env_file: ./admin/.env
@@ -35,3 +59,10 @@ services:
       - backend
     ports:
       - 5171:5174
+    networks:
+      - mern-net
+volumes:
+  mongo_data:
+networks:
+  mern-net:
+    driver: bridge
