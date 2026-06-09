@@ -93,10 +93,10 @@ pipeline {
             }
         }
 
-       stage('Integration Tests') {
-    steps {
-        script {
-            sh '''
+        stage('Integration Tests') {
+            steps {
+                script {
+                    sh '''
             curl -f http://localhost:3000/api/user || {
                 echo "User API test failed"
                 exit 1
@@ -104,9 +104,8 @@ pipeline {
 
             echo "User API accessible"
             '''
-        }
-    }
-}
+                }
+            }
         }
 
         stage('Performance Check') {
