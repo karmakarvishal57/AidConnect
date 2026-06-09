@@ -43,7 +43,7 @@ pipeline {
                 echo 'Starting MERN application...'
 
                 script {
-                    sh 'docker compose up -d'
+                    sh 'docker-compose up -d'
 
                     echo 'Waiting for services to start...'
                     sleep(time: 30, unit: 'SECONDS')
