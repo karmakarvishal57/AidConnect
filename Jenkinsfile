@@ -237,4 +237,4 @@ EOF
             echo 'Pipeline completed with warnings'
         }
     }
-    }
+} }
