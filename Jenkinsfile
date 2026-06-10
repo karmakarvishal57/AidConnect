@@ -102,7 +102,7 @@ EOF
                     '''
 
                     sh '''
-                        curl -f http://localhost:5173 || {
+                        curl -f http://localhost:5170 || {
                             echo "Frontend health check failed"
                             exit 1
                         }
@@ -110,7 +110,7 @@ EOF
                     '''
 
                     sh '''
-                        curl -f http://localhost:5174 || {
+                        curl -f http://localhost:5171 || {
                             echo "Admin health check failed"
                             exit 1
                         }
@@ -153,10 +153,10 @@ EOF
                         time curl -s http://localhost:3000/api/doctor/list > /dev/null
 
                         echo "Checking frontend load time ..."
-                        time curl -s http://localhost:5173 > /dev/null
+                        time curl -s http://localhost:5170 > /dev/null
 
                         echo "Checking admin load time ..."
-                        time curl -s http://localhost:5174 > /dev/null
+                        time curl -s http://localhost:5171 > /dev/null
                     '''
                 }
             }
@@ -164,22 +164,22 @@ EOF
     }
 
     post {
-        always {
-            echo 'Cleaning up resources...'
+        // always {
+        //     echo 'Cleaning up resources...'
 
-            script {
-                sh '''
-                    echo "Stopping application containers..."
-                    docker compose down || true
+        //     script {
+        //         sh '''
+        //             echo "Stopping application containers..."
+        //             docker compose down || true
 
-                    echo "Removing test containers..."
-                    docker ps -aq --filter "label=jenkins-test" | xargs -r docker rm -f
+        //             echo "Removing test containers..."
+        //             docker ps -aq --filter "label=jenkins-test" | xargs -r docker rm -f
 
-                    echo "Cleaning up unused images..."
-                    docker image prune -f || true
-                '''
-            }
-        }
+        //             echo "Cleaning up unused images..."
+        //             docker image prune -f || true
+        //         '''
+        //     }
+        // }
 
         success {
             echo 'Pipeline completed successfully!'
