@@ -165,7 +165,7 @@ EOF
         stage('Push to Registry') {
             when {
                 expression {
-                    return env.BRANCH_NAME == 'main'
+                    return env.GIT_BRANCH == 'origin/main'
                 }
             }
             steps {
