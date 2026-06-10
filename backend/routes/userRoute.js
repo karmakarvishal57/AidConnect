@@ -14,7 +14,9 @@ const authUser = require('../middlewares/authUser');
 const upload = require('../middlewares/multer');
 
 const userRouter = express.Router();
-userRouter.get('/',(req,res)=>{res.send('Api Working Fine')});
+userRouter.get('/', (req, res) => {
+  res.send('Api Working Fine');
+});
 userRouter.post('/register', registerUser);
 userRouter.post('/login', loginUser);
 userRouter.get('/get-profile', authUser, getProfile);
