@@ -164,14 +164,15 @@ EOF
 
         stage('Push to Registry') {
             when {
-                branch 'main'
+                expression {
+                    return env.BRANCH_NAME == 'main'
+                }
             }
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-creds',
                         usernameVariable: 'USERNAME',
                         passwordVariable: 'PASSWORD')]) {
-
                         sh 'docker login -u $USERNAME -p $PASSWORD'
                         sh "docker tag ${BACKEND_IMAGE} ${DOCKER_REGISTRY}/mern-backend:${BUILD_NUMBER}"
                         sh "docker tag ${FRONTEND_IMAGE} ${DOCKER_REGISTRY}/mern-frontend:${BUILD_NUMBER}"
@@ -179,7 +180,7 @@ EOF
                         sh "docker push ${DOCKER_REGISTRY}/mern-backend:${BUILD_NUMBER}"
                         sh "docker push ${DOCKER_REGISTRY}/mern-frontend:${BUILD_NUMBER}"
                         sh "docker push ${DOCKER_REGISTRY}/mern-admin:${BUILD_NUMBER}"
-                    }
+                        }
                 }
             }
         }
