@@ -69,8 +69,8 @@ CLOUDINARY_API_SECRET_KEY=$CLOUDINARY_API_SECRET_KEY
 ADMIN_EMAIL=$ADMIN_EMAIL
 ADMIN_PASSWORD=$ADMIN_PASSWORD
 JWT_SECRET=$JWT_SECRET
-RAZORPAY_API_KEY=$razorpay_api_key
-RAZORPAY_SECRET_KEY=$razorpay_secret_key
+razorpay_api_key=$razorpay_api_key
+razorpay_secret_key=$razorpay_secret_key
 CURRENCY=$CURRENCY
 EOF
 
