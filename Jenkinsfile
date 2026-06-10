@@ -167,7 +167,7 @@ EOF
         branch 'main'  // Only push from main branch
     }
     steps {
-        script {
+         script {
             withCredentials([usernamePassword(credentialsId: 'dockerhub-creds',
                                              usernameVariable: 'USERNAME',
                                              passwordVariable: 'PASSWORD')]) {
@@ -180,9 +180,9 @@ EOF
                 sh "docker push ${DOCKER_REGISTRY}/mern-admin:${BUILD_NUMBER}"
                 }
 
-                }
-                                             }
+            }
         }
+    }
 
     post {
         always {
@@ -210,10 +210,10 @@ EOF
                     echo "Build #$BUILD_NUMBER succeeded at $(date)"
                 '''
                 slackSend(
-            channel: '#deployments',
-            color: 'good',
-            message: "✅ MERN Pipeline #${BUILD_NUMBER} succeeded! "
-        )
+                channel: '#deployments',
+                color: 'good',
+                message: "✅ MERN Pipeline #${BUILD_NUMBER} succeeded!"
+            )
             }
         }
 
@@ -226,10 +226,10 @@ EOF
                     docker compose logs || true
                 '''
                 slackSend(
-            channel: '#deployments',
-            color: 'danger',
-            message: "❌ MERN Pipeline #${BUILD_NUMBER} failed! Check logs: ${BUILD_URL}"
-        )
+                channel: '#deployments',
+                color: 'danger',
+                message: "❌ MERN Pipeline #${BUILD_NUMBER} failed! Check logs: ${BUILD_URL}"
+            )
             }
         }
 
