@@ -163,33 +163,32 @@ EOF
         }
 
         stage('Push to Registry') {
-    when {
-        branch 'main'  // Only push from main branch
-    }
-    steps {
-         script {
-            withCredentials([usernamePassword(credentialsId: 'dockerhub-creds',
+            when {
+                branch 'main'  // Only push from main branch
+            }
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds',
                                              usernameVariable: 'USERNAME',
                                              passwordVariable: 'PASSWORD')]) {
-                sh 'docker login -u $USERNAME -p $PASSWORD'
-                sh "docker tag ${BACKEND_IMAGE} ${DOCKER_REGISTRY}/mern-backend:${BUILD_NUMBER}"
-                sh "docker tag ${FRONTEND_IMAGE} ${DOCKER_REGISTRY}/mern-frontend:${BUILD_NUMBER}"
-                sh "docker tag ${ADMIN_IMAGE} ${DOCKER_REGISTRY}/mern-admin:${BUILD_NUMBER}"
-                sh "docker push ${DOCKER_REGISTRY}/mern-backend:${BUILD_NUMBER}"
-                sh "docker push ${DOCKER_REGISTRY}/mern-frontend:${BUILD_NUMBER}"
-                sh "docker push ${DOCKER_REGISTRY}/mern-admin:${BUILD_NUMBER}"
+                        sh 'docker login -u $USERNAME -p $PASSWORD'
+                        sh "docker tag ${BACKEND_IMAGE} ${DOCKER_REGISTRY}/mern-backend:${BUILD_NUMBER}"
+                        sh "docker tag ${FRONTEND_IMAGE} ${DOCKER_REGISTRY}/mern-frontend:${BUILD_NUMBER}"
+                        sh "docker tag ${ADMIN_IMAGE} ${DOCKER_REGISTRY}/mern-admin:${BUILD_NUMBER}"
+                        sh "docker push ${DOCKER_REGISTRY}/mern-backend:${BUILD_NUMBER}"
+                        sh "docker push ${DOCKER_REGISTRY}/mern-frontend:${BUILD_NUMBER}"
+                        sh "docker push ${DOCKER_REGISTRY}/mern-admin:${BUILD_NUMBER}"
+                                             }
                 }
-
             }
         }
-    }
 
-    post {
-        always {
-            echo 'Cleaning up resources...'
+        post {
+            always {
+                echo 'Cleaning up resources...'
 
-            script {
-                sh '''
+                script {
+                    sh '''
                     echo "Stopping application containers..."
                     docker compose down || true
 
@@ -199,42 +198,43 @@ EOF
                     echo "Cleaning up unused images..."
                     docker image prune -f || true
                 '''
+                }
             }
-        }
 
-        success {
-            echo 'Pipeline completed successfully!'
+            success {
+                echo 'Pipeline completed successfully!'
 
-            script {
-                sh '''
+                script {
+                    sh '''
                     echo "Build #$BUILD_NUMBER succeeded at $(date)"
                 '''
-                slackSend(
+                    slackSend(
                 channel: '#deployments',
                 color: 'good',
                 message: "✅ MERN Pipeline #${BUILD_NUMBER} succeeded!"
             )
+                }
             }
-        }
 
-        failure {
-            echo 'Pipeline failed!'
+            failure {
+                echo 'Pipeline failed!'
 
-            script {
-                sh '''
+                script {
+                    sh '''
                     echo "Capturing container logs for debugging..."
                     docker compose logs || true
                 '''
-                slackSend(
+                    slackSend(
                 channel: '#deployments',
                 color: 'danger',
                 message: "❌ MERN Pipeline #${BUILD_NUMBER} failed! Check logs: ${BUILD_URL}"
             )
+                }
+            }
+
+            unstable {
+                echo 'Pipeline completed with warnings'
             }
         }
-
-        unstable {
-            echo 'Pipeline completed with warnings'
-        }
-    }
-} }
+    } 
+}
