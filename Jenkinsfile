@@ -161,7 +161,28 @@ EOF
                 }
             }
         }
+
+        stage('Push to Registry') {
+    when {
+        branch 'main'  // Only push from main branch
     }
+    steps {
+        script {
+            withCredentials([usernamePassword(credentialsId: 'dockerhub-creds',
+                                             usernameVariable: 'USERNAME',
+                                             passwordVariable: 'PASSWORD')]) {
+                sh 'docker login -u $USERNAME -p $PASSWORD'
+                sh "docker tag ${BACKEND_IMAGE} ${DOCKER_REGISTRY}/mern-backend:${BUILD_NUMBER}"
+                sh "docker tag ${FRONTEND_IMAGE} ${DOCKER_REGISTRY}/mern-frontend:${BUILD_NUMBER}"
+                sh "docker tag ${ADMIN_IMAGE} ${DOCKER_REGISTRY}/mern-admin:${BUILD_NUMBER}"
+                sh "docker push ${DOCKER_REGISTRY}/mern-backend:${BUILD_NUMBER}"
+                sh "docker push ${DOCKER_REGISTRY}/mern-frontend:${BUILD_NUMBER}"
+                sh "docker push ${DOCKER_REGISTRY}/mern-admin:${BUILD_NUMBER}"
+                }
+
+                }
+                                             }
+        }
 
     post {
         always {
@@ -188,6 +209,11 @@ EOF
                 sh '''
                     echo "Build #$BUILD_NUMBER succeeded at $(date)"
                 '''
+                slackSend(
+            channel: '#deployments',
+            color: 'good',
+            message: "✅ MERN Pipeline #${BUILD_NUMBER} succeeded! "
+        )
             }
         }
 
@@ -199,6 +225,11 @@ EOF
                     echo "Capturing container logs for debugging..."
                     docker compose logs || true
                 '''
+                slackSend(
+            channel: '#deployments',
+            color: 'danger',
+            message: "❌ MERN Pipeline #${BUILD_NUMBER} failed! Check logs: ${BUILD_URL}"
+        )
             }
         }
 
@@ -206,4 +237,4 @@ EOF
             echo 'Pipeline completed with warnings'
         }
     }
-}
+    }
