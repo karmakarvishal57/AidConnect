@@ -63,6 +63,7 @@ jobs:
           EC2_HOST: ${{ secrets.EC2_HOST }}
         run: |
           mkdir -p ~/.ssh
+          set +e
           ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts 
           echo "Exit code: $?"
       - name: Write SSH key
