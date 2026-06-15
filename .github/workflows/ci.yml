@@ -55,7 +55,7 @@ jobs:
   deploy:
     needs: build-and-lint
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' 
+    if: github.event_name == 'push'
 
     steps:
       - name: Add EC2 host to known_hosts
@@ -64,7 +64,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts 
-
+          echo "Exit code: $?"
       - name: Write SSH key
         run: |
           echo "${EC2_KEY}" > ec2_key.pem
