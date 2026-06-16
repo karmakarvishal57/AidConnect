@@ -1,12 +1,12 @@
 services:
-  mongo:
-    image: mongo:6.0
-    container_name: mongo
-    restart: unless-stopped
-    volumes:
-      - mongo_data:/data/db
-    networks:
-      - mern-net
+  # mongo:
+  #   image: mongo:6.0
+  #   container_name: mongo
+  #   restart: unless-stopped
+  #   volumes:
+  #     - mongo_data:/data/db
+  #   networks:
+  #     - mern-net
 
   backend:
     build:
@@ -20,8 +20,8 @@ services:
       - "3000:3000"
     depends_on:
       - mongo
-    networks:
-      - mern-net
+    # networks:
+    #   - mern-net
   frontend:
     build:
       # context: ./frontend
@@ -39,8 +39,8 @@ services:
       - backend
     ports:
       - 5170:5173
-    networks:
-      - mern-net
+    # networks:
+    #   - mern-net
 
   admin:
     build:
@@ -59,10 +59,10 @@ services:
       - backend
     ports:
       - 5171:5174
-    networks:
-      - mern-net
-volumes:
-  mongo_data:
-networks:
-  mern-net:
-    driver: bridge
+    # networks:
+    #   - mern-net
+# volumes:
+#   mongo_data:
+# networks:
+#   mern-net:
+#     driver: bridge
