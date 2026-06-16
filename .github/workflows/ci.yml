@@ -58,6 +58,10 @@ jobs:
     if: github.event_name == 'push'
 
     steps:
+      - name: Debug SSH
+        run: |
+          echo $EC2_HOST
+          nc -vz $EC2_HOST 22
       - name: Add EC2 host to known_hosts
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
