@@ -80,7 +80,11 @@ jobs:
           EC2_APP_DIR: ${{ secrets.EC2_APP_DIR }}
           BRANCH: ${{ github.ref_name }}
         run: |
-          ssh -i ec2_key.pem ${EC2_USER}@${EC2_HOST} << EOF
+          # Verify SSH key permissions
+          ls -la ec2_key.pem
+    
+          # Test SSH connectivity with timeout
+          ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=no -i ec2_key.pem ${EC2_USER}@${EC2_HOST} << EOF
           set -e
           cd "${EC2_APP_DIR}" || exit 1
 
