@@ -66,16 +66,6 @@ jobs:
           set +e
           ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts 
           echo "Exit code: $?"
-      - name: Debug SSH
-        env:
-          EC2_HOST: ${{ secrets.EC2_HOST }}
-        run: |
-          echo $EC2_HOST
-          if [ -z "$EC2_HOST" ]; then
-           echo "EC2_HOST is empty"
-           exit 1
-          fi
-          nc -vz "$EC2_HOST" 22
       - name: Write SSH key
         run: |
           echo "${EC2_KEY}" > ec2_key.pem
@@ -90,7 +80,7 @@ jobs:
           EC2_APP_DIR: ${{ secrets.EC2_APP_DIR }}
           BRANCH: ${{ github.ref_name }}
         run: |
-          ssh -i ec2_key.pem ${EC2_USER}@${EC2_HOST} << 'EOF'
+          ssh -i ec2_key.pem ${EC2_USER}@${EC2_HOST} << EOF
           set -e
           cd "${EC2_APP_DIR}" || exit 1
 
