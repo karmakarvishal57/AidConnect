@@ -59,13 +59,13 @@ jobs:
 
     steps:
       - name: Add EC2 host to known_hosts
-        env:
-          EC2_HOST: ${{ secrets.EC2_HOST }}
         run: |
           mkdir -p ~/.ssh
-          set +e
           ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts 
           echo "Exit code: $?"
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+
       - name: Write SSH key
         run: |
           echo "${EC2_KEY}" > ec2_key.pem
@@ -82,7 +82,7 @@ jobs:
         run: |
           # Verify SSH key permissions
           ls -la ec2_key.pem
-    
+
           # Test SSH connectivity with timeout
           ssh -i ec2_key.pem ${EC2_USER}@${EC2_HOST} << EOF
           set -e
@@ -91,7 +91,7 @@ jobs:
           # fetch latest code
           git fetch --all
           git reset --hard origin/${BRANCH}
- 
+
           #  rebuild containers
           docker compose up -d --build
 
