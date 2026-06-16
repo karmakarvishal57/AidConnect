@@ -84,14 +84,14 @@ jobs:
           ls -la ec2_key.pem
     
           # Test SSH connectivity with timeout
-          ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=no -i ec2_key.pem ${EC2_USER}@${EC2_HOST} << EOF
+          ssh -i ec2_key.pem ${EC2_USER}@${EC2_HOST} << EOF
           set -e
           cd "${EC2_APP_DIR}" || exit 1
 
           # fetch latest code
           git fetch --all
           git reset --hard origin/${BRANCH}
-
+ 
           #  rebuild containers
           docker compose up -d --build
 
